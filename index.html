@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digits of Pi Visualization</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Special Elite', monospace;
+            background-color: #080808;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+        }
+        #piContainer {
+            width: 95%;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            border: 1px solid #4a5568;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+            position: relative;
+            height: 500px;
+            overflow-y: auto;
+            background-color: #1a202c;
+        }
+        .piDigit {
+            position: absolute;
+            left: 0;
+            transition: top 0.5s ease, opacity 0.5s ease, color 0.5s ease;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #808080;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 flex justify-center items-start min-h-screen">
+    <div id="piContainer" class="bg-gray-800 rounded-lg shadow-lg p-8">
+        <div id="piDigits"></div>
+    </div>
+    <script>
+        const piDigitsContainer = document.getElementById('piDigits');
+        const pi = "31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679";
+        const containerHeight = document.getElementById('piContainer').offsetHeight;
+        const digitColors = ['#e53e3e', '#dd6b20', '#d69e2e', '#48bb78', '#3182ce', '#4299e1', '#667eea', '#805ad5', '#a78bfa', '#ed8936'];
+
+        let i = 0; // Keep track of the current digit index
+
+        function displayDigit() {
+            // Clear any existing content if we're restarting
+            if (i === 0) {
+                piDigitsContainer.innerHTML = '';
+            }
+
+            const digit = pi.charAt(i);
+            const digitElement = document.createElement('span');
+            digitElement.classList.add('piDigit');
+            digitElement.textContent = digit;
+
+            const digitValue = parseInt(digit, 10);
+            const minHeightPercentage = 0.25;
+            const maxHeightPercentage = 0.75;
+            const heightRange = maxHeightPercentage - minHeightPercentage;
+            const topPosition = containerHeight - (minHeightPercentage * containerHeight + (digitValue / 9) * (heightRange * containerHeight));
+
+            digitElement.style.top = `${topPosition}px`;
+            digitElement.style.left = `${(i % 100) * 15}px`; // Use modulo to loop through horizontal positions
+            piDigitsContainer.appendChild(digitElement);
+
+            setTimeout(() => {
+                digitElement.style.opacity = 1;
+                digitElement.style.color = digitColors[digitValue];
+            }, 0); // Start fade-in immediately
+
+            i = (i + 1) % pi.length; // Increment and wrap around
+            if (i === 0) {
+                setTimeout(() => {
+                    piDigitsContainer.innerHTML = ''; // Clear the container
+                    i = 0; // Reset the index
+                    displayDigit(); // Restart the display process
+                }, 1000);
+            }
+            else {
+                setTimeout(displayDigit, 1000); // Call the function again after 1 second
+            }
+        }
+
+        // Start the display process
+        displayDigit();
+    </script>
+</body>
+</html>
