@@ -52,8 +52,8 @@
             digitElement.textContent = digit;
 
             const digitValue = parseInt(digit, 10);
-            const minHeightPercentage = 0.25;
-            const maxHeightPercentage = 0.75;
+            const minHeightPercentage = 0.10;
+            const maxHeightPercentage = 0.90;
             const heightRange = maxHeightPercentage - minHeightPercentage;
             const topPosition = containerHeight - (minHeightPercentage * containerHeight + (digitValue / 9) * (heightRange * containerHeight));
 
